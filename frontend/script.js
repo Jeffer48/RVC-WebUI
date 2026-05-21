@@ -3,9 +3,19 @@ const fileInput = document.getElementById("fileInput");
 const dropText = document.getElementById("dropText");
 const voiceSelect = document.getElementById("voiceSelect");
 const transposeInput = document.getElementById("transpose");
+const f0methodSelect = document.getElementById("f0methodSelect");
 const indexRateRange = document.getElementById("indexRateRange");
 const indexRateNumber = document.getElementById("indexRateNumber");
 const indexRateValue = document.getElementById("indexRateValue");
+const protectRange = document.getElementById("protectRange");
+const protectNumber = document.getElementById("protectNumber");
+const protectValue = document.getElementById("protectValue");
+const rmsMixRange = document.getElementById("rmsMixRange");
+const rmsMixNumber = document.getElementById("rmsMixNumber");
+const rmsMixValue = document.getElementById("rmsMixValue");
+const filterRadiusRange = document.getElementById("filterRadiusRange");
+const filterRadiusNumber = document.getElementById("filterRadiusNumber");
+const filterRadiusValue = document.getElementById("filterRadiusValue");
 const generateBtn = document.getElementById("generateBtn");
 const resultSection = document.getElementById("resultSection");
 const audioPlayer = document.getElementById("audioPlayer");
@@ -56,19 +66,19 @@ function updateGenerateButton() {
     generateBtn.disabled = !(hasFile && hasVoice);
 }
 
-function syncIndexRate(source, value) {
+function syncDualControl(source, value, rangeEl, numberEl, valueEl, min, max, decimals) {
     const numVal = parseFloat(value);
     if (isNaN(numVal)) return;
-    const clamped = Math.min(1, Math.max(0, numVal));
-    const formatted = clamped.toFixed(2);
+    const clamped = Math.min(max, Math.max(min, numVal));
+    const formatted = decimals === 0 ? String(Math.round(clamped)) : clamped.toFixed(decimals);
 
-    if (source !== indexRateRange) {
-        indexRateRange.value = clamped;
+    if (source !== rangeEl) {
+        rangeEl.value = clamped;
     }
-    if (source !== indexRateNumber) {
-        indexRateNumber.value = formatted;
+    if (source !== numberEl) {
+        numberEl.value = formatted;
     }
-    indexRateValue.textContent = formatted;
+    valueEl.textContent = formatted;
     generateBtn.disabled = !(selectedFile && voiceSelect.value);
 }
 
@@ -169,13 +179,34 @@ voiceSelect.addEventListener("change", () => {
 });
 
 transposeInput.addEventListener("input", updateGenerateButton);
+f0methodSelect.addEventListener("change", updateGenerateButton);
 
 indexRateRange.addEventListener("input", function () {
-    syncIndexRate(indexRateRange, this.value);
+    syncDualControl(indexRateRange, this.value, indexRateRange, indexRateNumber, indexRateValue, 0, 1, 2);
+});
+indexRateNumber.addEventListener("input", function () {
+    syncDualControl(indexRateNumber, this.value, indexRateRange, indexRateNumber, indexRateValue, 0, 1, 2);
 });
 
-indexRateNumber.addEventListener("input", function () {
-    syncIndexRate(indexRateNumber, this.value);
+protectRange.addEventListener("input", function () {
+    syncDualControl(protectRange, this.value, protectRange, protectNumber, protectValue, 0, 0.5, 2);
+});
+protectNumber.addEventListener("input", function () {
+    syncDualControl(protectNumber, this.value, protectRange, protectNumber, protectValue, 0, 0.5, 2);
+});
+
+rmsMixRange.addEventListener("input", function () {
+    syncDualControl(rmsMixRange, this.value, rmsMixRange, rmsMixNumber, rmsMixValue, 0, 1, 2);
+});
+rmsMixNumber.addEventListener("input", function () {
+    syncDualControl(rmsMixNumber, this.value, rmsMixRange, rmsMixNumber, rmsMixValue, 0, 1, 2);
+});
+
+filterRadiusRange.addEventListener("input", function () {
+    syncDualControl(filterRadiusRange, this.value, filterRadiusRange, filterRadiusNumber, filterRadiusValue, 0, 7, 0);
+});
+filterRadiusNumber.addEventListener("input", function () {
+    syncDualControl(filterRadiusNumber, this.value, filterRadiusRange, filterRadiusNumber, filterRadiusValue, 0, 7, 0);
 });
 
 generateBtn.addEventListener("click", async () => {
@@ -197,11 +228,11 @@ generateBtn.addEventListener("click", async () => {
         formData.append("audio", selectedFile);
         formData.append("voice", voiceSelect.value);
         formData.append("transpose", transposeInput.value || "0");
-        formData.append(
-            "f0_method",
-            document.querySelector('input[name="f0method"]:checked').value
-        );
+        formData.append("f0_method", f0methodSelect.value);
         formData.append("index_rate", indexRateNumber.value);
+        formData.append("protect", protectNumber.value);
+        formData.append("rms_mix_rate", rmsMixNumber.value);
+        formData.append("filter_radius", filterRadiusNumber.value);
 
         const resp = await fetch("/api/convert", {
             method: "POST",

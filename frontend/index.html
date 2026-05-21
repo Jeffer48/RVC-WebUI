@@ -33,17 +33,13 @@
             </div>
 
             <div class="control-group">
-                <label>F0 Method</label>
-                <div class="radio-group">
-                    <label class="radio-label">
-                        <input type="radio" name="f0method" value="pm" checked>
-                        PM
-                    </label>
-                    <label class="radio-label">
-                        <input type="radio" name="f0method" value="harvest">
-                        Harvest
-                    </label>
-                </div>
+                <label for="f0methodSelect">F0 Method</label>
+                <select id="f0methodSelect">
+                    <option value="rmvpe" selected>RMVPE (recommended)</option>
+                    <option value="harvest">Harvest</option>
+                    <option value="crepe">Crepe</option>
+                    <option value="pm">PM</option>
+                </select>
             </div>
 
             <div class="control-group">
@@ -51,6 +47,30 @@
                 <div class="dual-control">
                     <input type="range" id="indexRateRange" min="0" max="1" step="0.01" value="0.50">
                     <input type="number" id="indexRateNumber" min="0" max="1" step="0.01" value="0.50">
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label for="protectRange">Protect <span id="protectValue" class="hint">0.33</span></label>
+                <div class="dual-control">
+                    <input type="range" id="protectRange" min="0" max="0.5" step="0.01" value="0.33">
+                    <input type="number" id="protectNumber" min="0" max="0.5" step="0.01" value="0.33">
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label for="rmsMixRange">RMS Mix Rate <span id="rmsMixValue" class="hint">1.00</span></label>
+                <div class="dual-control">
+                    <input type="range" id="rmsMixRange" min="0" max="1" step="0.01" value="1.00">
+                    <input type="number" id="rmsMixNumber" min="0" max="1" step="0.01" value="1.00">
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label for="filterRadiusRange">Filter Radius <span id="filterRadiusValue" class="hint">3</span></label>
+                <div class="dual-control">
+                    <input type="range" id="filterRadiusRange" min="0" max="7" step="1" value="3">
+                    <input type="number" id="filterRadiusNumber" min="0" max="7" step="1" value="3">
                 </div>
             </div>
 
