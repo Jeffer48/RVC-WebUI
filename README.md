@@ -1,6 +1,19 @@
 # RVC Voice Converter
 
-A web application for Voice-to-Voice conversion using the [RVC (Retrieval-based Voice Conversion)](https://github.com/daswer123/rvc-python) model. Built with **FastAPI** (backend) and **Vanilla JS** (frontend).
+> 📖 **Parameter guides:** [Español](docs/PARAMETERS_ES.md) · [English](docs/PARAMETERS_EN.md)
+
+---
+
+## Quick Start (Release)
+
+1. Download the latest release from GitHub
+2. Extract the `.zip` file
+3. Run `RVC-WebUI.exe`
+4. A terminal window and your browser will open automatically
+5. Add your `.pth` models to the `voices/` folder
+6. Upload an audio file and click **Generate**
+
+---
 
 ## Features
 
@@ -17,20 +30,25 @@ A web application for Voice-to-Voice conversion using the [RVC (Retrieval-based 
 ```
 RVC/
 ├── backend/
-│   └── main.py              # FastAPI server (3 endpoints)
+│   └── main.py              # FastAPI server (4 endpoints)
 ├── frontend/
 │   ├── index.html           # UI
 │   ├── style.css            # Styling (dark theme)
 │   └── script.js            # Client logic (vanilla JS)
-├── voices/                  # RVC voice models (see below)
+├── docs/
+│   ├── PARAMETERS_ES.md     # Parameter guide (Spanish)
+│   └── PARAMETERS_EN.md     # Parameter guide (English)
+├── voices/                  # RVC voice models (gitignored)
 │   └── sample_voice/        # Example folder (keep this)
-├── outputs/                 # Converted audio files (auto-created)
-├── start.bat                # Windows launcher
+├── outputs/                 # Converted audio (auto-created)
+├── launcher.py              # PyInstaller entry point
+├── build.spec               # PyInstaller build config
+├── start.bat                # Windows launcher (dev)
 ├── requirements.txt         # Python dependencies
 └── .gitignore
 ```
 
-## Requirements
+## Requirements (Development)
 
 - **Python 3.11** (required; newer versions may cause dependency conflicts)
 - Virtual environment (`.venv`)
@@ -43,7 +61,7 @@ pip install rvc-python
 
 This pulls in PyTorch, TorchAudio, FastAPI, Uvicorn, and all audio processing libraries.
 
-## Setup
+## Setup (Development)
 
 ```powershell
 # 1. Create virtual environment with Python 3.11
@@ -71,7 +89,9 @@ voices/
 
 The `voices/` folder is gitignored except for `sample_voice/`. Each model is auto-detected at server startup and listed in the frontend dropdown.
 
-## Running
+You can also upload new voices directly from the web interface using the **"+ Add Voice"** button next to the voice selector.
+
+## Running (Development)
 
 Double-click `start.bat` or run manually:
 
@@ -109,17 +129,14 @@ After each inference, `gc.collect()` and `torch.cuda.empty_cache()` are called t
 | `/` | GET | Redirects to the frontend |
 | `/api/info` | GET | Returns `{device, chunk_seconds}` |
 | `/api/voices` | GET | Lists available voice models |
+| `/api/voices/upload` | POST | Upload a new voice model (multipart) |
 | `/api/convert` | POST | Converts audio (multipart form) |
 
 ### POST `/api/convert`
 
-| Field | Type | Default | Description |
-|---|---|---|---|
-| `audio` | File | required | WAV or MP3 file |
-| `voice` | string | required | Voice model name |
-| `transpose` | int | `0` | Pitch shift in semitones |
-| `f0_method` | string | `"pm"` | `"pm"` or `"harvest"` |
-| `index_rate` | float | `0.5` | Feature retrieval ratio (0.0–1.0) |
+Main parameters: `audio` (file), `voice` (str), `transpose` (int), `f0_method` (str), `index_rate` (float), `protect` (float), `rms_mix_rate` (float), `filter_radius` (int), `resample_sr` (int).
+
+See [`docs/PARAMETERS_EN.md`](docs/PARAMETERS_EN.md) for detailed parameter explanations.
 
 Response: `{"url": "/outputs/converted_{voice}_{timestamp}.wav", "filename": "..."}`
 
