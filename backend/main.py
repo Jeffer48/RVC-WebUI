@@ -19,6 +19,7 @@ _dc._get_field = _patched_get_field
 
 import gc
 import os
+import sys
 import tempfile
 from datetime import datetime
 from typing import Optional
@@ -42,12 +43,22 @@ from fastapi.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from rvc_python.infer import RVCInference
 
-VOICES_DIR = os.path.join(os.path.dirname(__file__), "..", "voices")
+if getattr(sys, "frozen", False):
+    _BASE_DIR = os.path.dirname(sys.executable)
+    _DATA_DIR = sys._MEIPASS  # type: ignore[attr-defined]
+else:
+    _BASE_DIR = os.path.join(os.path.dirname(__file__), "..")
+    _DATA_DIR = _BASE_DIR
+
+VOICES_DIR = os.path.join(_BASE_DIR, "voices")
 VOICES_DIR = os.path.abspath(VOICES_DIR)
 
-OUTPUTS_DIR = os.path.join(os.path.dirname(__file__), "..", "outputs")
+OUTPUTS_DIR = os.path.join(_BASE_DIR, "outputs")
 OUTPUTS_DIR = os.path.abspath(OUTPUTS_DIR)
 os.makedirs(OUTPUTS_DIR, exist_ok=True)
+
+FRONTEND_DIR = os.path.join(_DATA_DIR, "frontend")
+FRONTEND_DIR = os.path.abspath(FRONTEND_DIR)
 
 DEVICE = "cuda:0" if torch.cuda.is_available() else "cpu"
 MAX_DURATION = 600
@@ -66,8 +77,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-FRONTEND_DIR = os.path.join(os.path.dirname(__file__), "..", "frontend")
-FRONTEND_DIR = os.path.abspath(FRONTEND_DIR)
 app.mount("/static", StaticFiles(directory=FRONTEND_DIR, html=True), name="static")
 app.mount("/outputs", StaticFiles(directory=OUTPUTS_DIR), name="outputs")
 
