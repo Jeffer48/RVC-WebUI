@@ -21,6 +21,7 @@ import gc
 import os
 import tempfile
 from datetime import datetime
+from typing import Optional
 
 import soundfile as sf
 import torch
@@ -108,6 +109,44 @@ async def list_voices():
                 if pth_files:
                     voices.append(name)
     return {"voices": voices}
+
+
+@app.post("/api/voices/upload")
+async def upload_voice(
+    pth: UploadFile = File(...),
+    index: Optional[UploadFile] = File(None),
+    overwrite: bool = False,
+):
+    if not pth.filename or not pth.filename.lower().endswith(".pth"):
+        raise HTTPException(400, "A .pth model file is required")
+
+    base_name = pth.filename.rsplit(".", 1)[0]
+    if not base_name:
+        raise HTTPException(400, "Invalid filename")
+
+    voice_dir = os.path.join(VOICES_DIR, base_name)
+
+    if os.path.isdir(voice_dir) and not overwrite:
+        raise HTTPException(409, f"Voice '{base_name}' already exists")
+
+    os.makedirs(voice_dir, exist_ok=True)
+
+    pth_path = os.path.join(voice_dir, f"{base_name}.pth")
+    with open(pth_path, "wb") as f:
+        f.write(await pth.read())
+
+    if index is not None and index.filename:
+        index_base = index.filename.rsplit(".", 1)[0]
+        if index_base != base_name:
+            raise HTTPException(400, "Index file must have the same name as the model file")
+        index_path = os.path.join(voice_dir, f"{base_name}.index")
+        with open(index_path, "wb") as f:
+            f.write(await index.read())
+
+    rvc.set_models_dir(VOICES_DIR)
+    print(f"[RVC] Voice '{base_name}' uploaded")
+
+    return {"success": True, "voice": base_name}
 
 
 @app.post("/api/convert")

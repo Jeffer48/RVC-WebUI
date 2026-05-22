@@ -120,6 +120,99 @@ h2 {
     color: var(--text-muted);
 }
 
+.voice-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.voice-row select {
+    flex: 1;
+}
+
+button.small {
+    padding: 8px 14px;
+    font-size: 0.82rem;
+    white-space: nowrap;
+}
+
+.upload-panel {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.upload-panel > label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text);
+    text-transform: none;
+    letter-spacing: 0;
+}
+
+.upload-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.upload-label {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+}
+
+.upload-field input[type="file"] {
+    font-size: 0.82rem;
+    color: var(--text);
+}
+
+.upload-field input[type="file"]::file-selector-button {
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 6px 12px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.82rem;
+    margin-right: 8px;
+}
+
+.upload-field input[type="file"]::file-selector-button:hover {
+    background: var(--surface-hover);
+}
+
+.upload-preview {
+    background: var(--surface);
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.upload-preview span {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.upload-preview code {
+    font-size: 0.8rem;
+    color: var(--success);
+    white-space: pre;
+    line-height: 1.5;
+}
+
+.upload-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
 .info-icon {
     display: inline-flex;
     width: 18px;

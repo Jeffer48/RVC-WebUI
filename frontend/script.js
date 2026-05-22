@@ -27,6 +27,14 @@ const errorSection = document.getElementById("errorSection");
 const errorMessage = document.getElementById("errorMessage");
 const progressSection = document.getElementById("progressSection");
 const progressText = document.getElementById("progressText");
+const addVoiceBtn = document.getElementById("addVoiceBtn");
+const uploadPanel = document.getElementById("uploadPanel");
+const pthFileInput = document.getElementById("pthFileInput");
+const indexFileInput = document.getElementById("indexFileInput");
+const uploadPreview = document.getElementById("uploadPreview");
+const uploadPreviewPath = document.getElementById("uploadPreviewPath");
+const uploadCancelBtn = document.getElementById("uploadCancelBtn");
+const uploadSubmitBtn = document.getElementById("uploadSubmitBtn");
 
 let selectedFile = null;
 let resultAudioUrl = null;
@@ -279,6 +287,106 @@ downloadBtn.addEventListener("click", () => {
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
+});
+
+function updateUploadPreview() {
+    const pthFile = pthFileInput.files[0];
+    if (!pthFile) {
+        uploadPreview.style.display = "none";
+        uploadSubmitBtn.disabled = true;
+        return;
+    }
+    const baseName = pthFile.name.replace(/\.pth$/i, "");
+    uploadPreviewPath.textContent = `voices/${baseName}/\n  \u251C\u2500 ${baseName}.pth\n  \u2514\u2500 ${baseName}.index`;
+    uploadPreview.style.display = "flex";
+    uploadSubmitBtn.disabled = false;
+}
+
+function resetUploadPanel() {
+    pthFileInput.value = "";
+    indexFileInput.value = "";
+    uploadPreview.style.display = "none";
+    uploadSubmitBtn.disabled = true;
+    uploadPanel.style.display = "none";
+}
+
+addVoiceBtn.addEventListener("click", () => {
+    resetUploadPanel();
+    uploadPanel.style.display = "block";
+});
+
+uploadCancelBtn.addEventListener("click", () => {
+    resetUploadPanel();
+});
+
+pthFileInput.addEventListener("change", updateUploadPreview);
+
+uploadSubmitBtn.addEventListener("click", async () => {
+    const pthFile = pthFileInput.files[0];
+    if (!pthFile) return;
+
+    const baseName = pthFile.name.replace(/\.pth$/i, "");
+    const indexFile = indexFileInput.files[0];
+
+    if (indexFile) {
+        const indexBase = indexFile.name.replace(/\.index$/i, "");
+        if (indexBase !== baseName) {
+            showError("Index file must have the same name as the model file.");
+            return;
+        }
+    }
+
+    uploadSubmitBtn.disabled = true;
+    uploadSubmitBtn.textContent = "Uploading...";
+    hideError();
+
+    const doUpload = async (overwrite) => {
+        const formData = new FormData();
+        formData.append("pth", pthFile);
+        if (indexFile) formData.append("index", indexFile);
+        if (overwrite) formData.append("overwrite", "true");
+
+        const resp = await fetch("/api/voices/upload", {
+            method: "POST",
+            body: formData,
+        });
+
+        if (!resp.ok) {
+            const errData = await resp.json().catch(() => null);
+            const detail = errData?.detail || `Upload error: ${resp.status}`;
+            if (resp.status === 409) {
+                return { conflict: true, detail, baseName };
+            }
+            throw new Error(detail);
+        }
+        return await resp.json();
+    };
+
+    try {
+        let result = await doUpload(false);
+
+        if (result.conflict) {
+            const overwrite = confirm(
+                `Voice '${baseName}' already exists.\n\nDo you want to overwrite it?`
+            );
+            if (!overwrite) {
+                uploadSubmitBtn.disabled = false;
+                uploadSubmitBtn.textContent = "Upload Voice";
+                return;
+            }
+            result = await doUpload(true);
+        }
+
+        resetUploadPanel();
+        await loadVoices();
+        voiceSelect.value = result.voice;
+        updateGenerateButton();
+    } catch (err) {
+        showError(err.message);
+    } finally {
+        uploadSubmitBtn.disabled = false;
+        uploadSubmitBtn.textContent = "Upload Voice";
+    }
 });
 
 Promise.all([loadServerInfo(), loadVoices()]);
