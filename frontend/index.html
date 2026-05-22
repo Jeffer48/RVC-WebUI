@@ -21,19 +21,19 @@
 
         <section class="controls">
             <div class="control-group">
-                <label for="voiceSelect">Voice</label>
+                <label for="voiceSelect">Voice <span class="info-icon" aria-label="Which voice to convert into. Each folder under voices/ is a trained model."><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/><path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/></svg></span></label>
                 <select id="voiceSelect">
                     <option value="">Loading voices...</option>
                 </select>
             </div>
 
             <div class="control-group">
-                <label for="transpose">Transpose <span class="hint">(semitones)</span></label>
+                <label for="transpose">Transpose <span class="hint">(semitones)</span> <span class="info-icon" aria-label="Higher = brighter voice. Lower = deeper voice. 0 leaves pitch unchanged."><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/><path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/></svg></span></label>
                 <input type="number" id="transpose" value="0" step="1">
             </div>
 
             <div class="control-group">
-                <label for="f0methodSelect">F0 Method</label>
+                <label for="f0methodSelect">F0 Method <span class="info-icon" aria-label="Affects pitch accuracy and speed. RMVPE: best quality. Crepe: highest accuracy, slower. Harvest: good for singing. PM: fastest."><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/><path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/></svg></span></label>
                 <select id="f0methodSelect">
                     <option value="rmvpe" selected>RMVPE (recommended)</option>
                     <option value="harvest">Harvest</option>
@@ -43,7 +43,7 @@
             </div>
 
             <div class="control-group">
-                <label for="indexRateRange">Index Rate <span id="indexRateValue" class="hint">0.50</span></label>
+                <label for="indexRateRange">Index Rate <span id="indexRateValue" class="hint">0.50</span> <span class="info-icon" aria-label="Higher = sounds more like the target voice (can be robotic). Lower = sounds more natural but less similar."><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/><path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/></svg></span></label>
                 <div class="dual-control">
                     <input type="range" id="indexRateRange" min="0" max="1" step="0.01" value="0.50">
                     <input type="number" id="indexRateNumber" min="0" max="1" step="0.01" value="0.50">
@@ -51,7 +51,7 @@
             </div>
 
             <div class="control-group">
-                <label for="protectRange">Protect <span id="protectValue" class="hint">0.33</span></label>
+                <label for="protectRange">Protect <span id="protectValue" class="hint">0.33</span> <span class="info-icon" aria-label="Higher = clearer consonants (less lisping). Lower = more aggressive conversion (may distort s/f/t sounds)."><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/><path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/></svg></span></label>
                 <div class="dual-control">
                     <input type="range" id="protectRange" min="0" max="0.5" step="0.01" value="0.33">
                     <input type="number" id="protectNumber" min="0" max="0.5" step="0.01" value="0.33">
@@ -59,7 +59,7 @@
             </div>
 
             <div class="control-group">
-                <label for="rmsMixRange">RMS Mix Rate <span id="rmsMixValue" class="hint">0.25</span></label>
+                <label for="rmsMixRange">RMS Mix Rate <span id="rmsMixValue" class="hint">0.25</span> <span class="info-icon" aria-label="Controls metallic/robotic sound. Lower (0.15-0.25) = more natural dynamics, less robotic. Higher = louder but may sound artificial."><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/><path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/></svg></span></label>
                 <div class="dual-control">
                     <input type="range" id="rmsMixRange" min="0" max="1" step="0.01" value="0.25">
                     <input type="number" id="rmsMixNumber" min="0" max="1" step="0.01" value="0.25">
@@ -67,7 +67,7 @@
             </div>
 
             <div class="control-group">
-                <label for="filterRadiusRange">Filter Radius <span id="filterRadiusValue" class="hint">3</span></label>
+                <label for="filterRadiusRange">Filter Radius <span id="filterRadiusValue" class="hint">3</span> <span class="info-icon" aria-label="Higher = smoother pitch, less vibrato (can sound flat). Lower = more expressive, more natural inflection (may have pitch wobble)."><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/><path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/></svg></span></label>
                 <div class="dual-control">
                     <input type="range" id="filterRadiusRange" min="0" max="7" step="1" value="3">
                     <input type="number" id="filterRadiusNumber" min="0" max="7" step="1" value="3">
@@ -75,7 +75,7 @@
             </div>
 
             <div class="control-group">
-                <label for="resampleSrRange">Resample SR <span id="resampleSrValue" class="hint">0</span></label>
+                <label for="resampleSrRange">Resample SR <span id="resampleSrValue" class="hint">0</span> <span class="info-icon" aria-label="Higher = better fidelity, larger file. 0 = uses the model's native rate. 44100 is CD quality."><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/><path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/></svg></span></label>
                 <div class="dual-control">
                     <input type="range" id="resampleSrRange" min="0" max="48000" step="1000" value="0">
                     <input type="number" id="resampleSrNumber" min="0" max="48000" step="1000" value="0">
