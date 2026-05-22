@@ -52,6 +52,7 @@ else:
 
 VOICES_DIR = os.path.join(_BASE_DIR, "voices")
 VOICES_DIR = os.path.abspath(VOICES_DIR)
+os.makedirs(VOICES_DIR, exist_ok=True)
 
 OUTPUTS_DIR = os.path.join(_BASE_DIR, "outputs")
 OUTPUTS_DIR = os.path.abspath(OUTPUTS_DIR)
