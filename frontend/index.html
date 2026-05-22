@@ -59,10 +59,10 @@
             </div>
 
             <div class="control-group">
-                <label for="rmsMixRange">RMS Mix Rate <span id="rmsMixValue" class="hint">1.00</span></label>
+                <label for="rmsMixRange">RMS Mix Rate <span id="rmsMixValue" class="hint">0.25</span></label>
                 <div class="dual-control">
-                    <input type="range" id="rmsMixRange" min="0" max="1" step="0.01" value="1.00">
-                    <input type="number" id="rmsMixNumber" min="0" max="1" step="0.01" value="1.00">
+                    <input type="range" id="rmsMixRange" min="0" max="1" step="0.01" value="0.25">
+                    <input type="number" id="rmsMixNumber" min="0" max="1" step="0.01" value="0.25">
                 </div>
             </div>
 
@@ -71,6 +71,14 @@
                 <div class="dual-control">
                     <input type="range" id="filterRadiusRange" min="0" max="7" step="1" value="3">
                     <input type="number" id="filterRadiusNumber" min="0" max="7" step="1" value="3">
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label for="resampleSrRange">Resample SR <span id="resampleSrValue" class="hint">0</span></label>
+                <div class="dual-control">
+                    <input type="range" id="resampleSrRange" min="0" max="48000" step="1000" value="0">
+                    <input type="number" id="resampleSrNumber" min="0" max="48000" step="1000" value="0">
                 </div>
             </div>
 

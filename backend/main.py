@@ -118,8 +118,9 @@ async def convert_audio(
     f0_method: str = Form("rmvpe"),
     index_rate: float = Form(0.5),
     protect: float = Form(0.33),
-    rms_mix_rate: float = Form(1.0),
+    rms_mix_rate: float = Form(0.25),
     filter_radius: int = Form(3),
+    resample_sr: int = Form(0),
 ):
     if f0_method not in ("pm", "harvest", "crepe", "rmvpe"):
         raise HTTPException(400, "f0_method must be pm, harvest, crepe, or rmvpe")
@@ -131,6 +132,8 @@ async def convert_audio(
         raise HTTPException(400, "rms_mix_rate must be between 0.0 and 1.0")
     if not (0 <= filter_radius <= 7):
         raise HTTPException(400, "filter_radius must be between 0 and 7")
+    if resample_sr != 0 and not (16000 <= resample_sr <= 48000):
+        raise HTTPException(400, "resample_sr must be 0 or between 16000 and 48000")
 
     voice_dir = os.path.join(VOICES_DIR, voice)
     if not os.path.isdir(voice_dir):
@@ -182,6 +185,7 @@ async def convert_audio(
             protect=protect,
             rms_mix_rate=rms_mix_rate,
             filter_radius=filter_radius,
+            resample_sr=resample_sr,
         )
         rvc.infer_file(tmp_input.name, tmp_output.name)
 

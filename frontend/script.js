@@ -16,6 +16,9 @@ const rmsMixValue = document.getElementById("rmsMixValue");
 const filterRadiusRange = document.getElementById("filterRadiusRange");
 const filterRadiusNumber = document.getElementById("filterRadiusNumber");
 const filterRadiusValue = document.getElementById("filterRadiusValue");
+const resampleSrRange = document.getElementById("resampleSrRange");
+const resampleSrNumber = document.getElementById("resampleSrNumber");
+const resampleSrValue = document.getElementById("resampleSrValue");
 const generateBtn = document.getElementById("generateBtn");
 const resultSection = document.getElementById("resultSection");
 const audioPlayer = document.getElementById("audioPlayer");
@@ -209,6 +212,13 @@ filterRadiusNumber.addEventListener("input", function () {
     syncDualControl(filterRadiusNumber, this.value, filterRadiusRange, filterRadiusNumber, filterRadiusValue, 0, 7, 0);
 });
 
+resampleSrRange.addEventListener("input", function () {
+    syncDualControl(resampleSrRange, this.value, resampleSrRange, resampleSrNumber, resampleSrValue, 0, 48000, 0);
+});
+resampleSrNumber.addEventListener("input", function () {
+    syncDualControl(resampleSrNumber, this.value, resampleSrRange, resampleSrNumber, resampleSrValue, 0, 48000, 0);
+});
+
 generateBtn.addEventListener("click", async () => {
     if (!selectedFile || !voiceSelect.value) return;
 
@@ -233,6 +243,7 @@ generateBtn.addEventListener("click", async () => {
         formData.append("protect", protectNumber.value);
         formData.append("rms_mix_rate", rmsMixNumber.value);
         formData.append("filter_radius", filterRadiusNumber.value);
+        formData.append("resample_sr", resampleSrNumber.value);
 
         const resp = await fetch("/api/convert", {
             method: "POST",
