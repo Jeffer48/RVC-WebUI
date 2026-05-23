@@ -16,6 +16,27 @@ def open_browser():
     webbrowser.open("http://127.0.0.1:8000")
 
 
+def _check_gpu_mismatch():
+    import ctypes
+
+    try:
+        ctypes.windll.LoadLibrary("nvcuda.dll")
+        has_nvidia_driver = True
+    except OSError:
+        has_nvidia_driver = False
+
+    import torch
+
+    if has_nvidia_driver and not torch.cuda.is_available():
+        print("=" * 60)
+        print("  WARNING: NVIDIA GPU detected but PyTorch is CPU-only!")
+        print("  You are running the CPU build on a machine with an")
+        print("  NVIDIA graphics card. Download the CUDA build for")
+        print("  much faster performance (GPU acceleration).")
+        print("=" * 60)
+        print()
+
+
 if __name__ == "__main__":
     print("[RVC] Starting RVC WebUI...")
 
@@ -44,6 +65,8 @@ if __name__ == "__main__":
 
     print("[RVC] Loading modules...")
     import backend.main
+
+    _check_gpu_mismatch()
 
     print(f"[RVC] Working directory: {ROOT}")
     print(f"[RVC] Server ready at http://127.0.0.1:8000")

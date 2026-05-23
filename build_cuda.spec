@@ -66,7 +66,7 @@ exe = EXE(
     a.binaries,
     a.datas,
     [],
-    name="RVC-WebUI",
+    name="RVC-WebUI-CUDA",
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
